@@ -52,14 +52,13 @@ def parse_taxe_concepts(param):
     if key in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
         if type(get_props) is list:
             for i in range(len(get_props)):
-                taxeConcept = {
+                taxe_list.append({
                     "taxe": get_props[i]["@Impuesto"],
                     "base": get_props[i]['@Base'],
                     "factor_type": get_props[i]['@TipoFactor'],
                     "rate_or_fee": get_props[i]['@TasaOCuota'],
                     "total_amount": get_props[i]['@Importe']
-                }
-                taxe_list.append(taxeConcept)
+                })
             return taxe_list
         elif(type(get_props) is dict):
             taxeConcept = {
@@ -73,6 +72,7 @@ def parse_taxe_concepts(param):
     return None
 
 # not tested in payroll invoice
+
 def parse_taxe_retention(param):
     keys = ["cfdi:Impuestos","cfdi:Retenciones"]
     retention={}
@@ -84,14 +84,13 @@ def parse_taxe_retention(param):
         if keys[0] in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
             if type(get_props) is list:
                 for i in range(len(get_props)):
-                    retention = {
+                    taxe_list.append({
                         "taxe": get_props[i]["@Impuesto"],
                         "base": get_props[i]['@Base'],
                         "factor_type": get_props[i]['@TipoFactor'],
                         "rate_or_fee": get_props[i]['@TasaOCuota'],
                         "total_amount": get_props[i]['@Importe']
-                    }
-                    taxe_list.append(retention)
+                    })
                 return taxe_list
             elif(type(get_props) is dict):
                 retention = {
@@ -103,5 +102,53 @@ def parse_taxe_retention(param):
                 }
             return retention
     return None
-    
 
+@it_contains_properties
+def parse_taxe_invoice_transfer(param):
+    key = "cfdi:Traslados"
+    taxe_transfer_list =[]; taxe_transfer_dict = {}
+
+    # Transfer with four properties
+    if key in param["cfdi:Comprobante"]["cfdi:Impuestos"]:
+        get_props = param.get('cfdi:Comprobante').get('cfdi:Impuestos').get('cfdi:Traslados').get('cfdi:Traslado')
+        if type(get_props) is list:
+            for i in range(len(get_props)):
+                taxe_transfer_list.append({
+                    "taxe": get_props[i]["@Impuesto"],
+                    "factor_type": get_props[i]['@TipoFactor'],
+                    "rate_or_fee": get_props[i]['@TasaOCuota'],
+                    "total_amount": get_props[i]['@Importe']
+                })
+            return taxe_transfer_list
+        elif(type(get_props) is dict):
+            taxe_transfer_dict = {
+                "taxe": get_props["@Impuesto"],
+                "factor_type": get_props['@TipoFactor'],
+                "rate_or_fee": get_props['@TasaOCuota'],
+                "total_amount": get_props['@Importe'],
+            }
+        return taxe_transfer_dict
+
+    
+@it_contains_properties
+def parse_taxe_invoice_retentions(param):
+    key = 'cfdi:Retenciones'
+    taxe_retention_list = []; taxe_retention_dict = {}
+    
+    # retentions with two properties
+    if key in param["cfdi:Comprobante"]["cfdi:Impuestos"]:
+        get_props = param.get('cfdi:Comprobante').get('cfdi:Impuestos').get('cfdi:Retenciones').get('cfdi:Retencion')
+        if type(get_props) is list:
+            for i in range(len(get_props)):
+                taxe_retention_list.append({
+                    "taxe": get_props[i]["@Impuesto"],
+                    "total_amount": get_props[i]['@Importe']
+                })
+            return taxe_retention_list
+        elif(type(get_props) is dict):
+            taxe_retention_dict = {
+                "taxe": get_props["@Impuesto"],
+                "total_amount": get_props['@Importe'],
+            }
+        return taxe_retention_dict
+    return None
