@@ -36,7 +36,7 @@ class InvoiceServices:
 
 if __name__ == "__main__":
     # testing locale file
-    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/example.xml"
+    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/retenciones.xml"
     with open("{}".format(path), "r", encoding="utf-8") as file:
         file_selected = file.read()
 

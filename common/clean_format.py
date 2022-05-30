@@ -77,7 +77,7 @@ def parse_taxe_retention(param):
     retention={}
     taxe_list =[]
     
-    if keys[1] in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
+    if keys[1] in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]['cfdi:Impuestos']:
         get_props = param.get('cfdi:Comprobante').get('cfdi:Conceptos').get('cfdi:Concepto').get('cfdi:Impuestos').get('cfdi:Retenciones').get('cfdi:Retencion')
  
         if keys[0] in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
