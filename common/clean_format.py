@@ -70,6 +70,7 @@ def parse_taxe_concepts(param):
                 "total_amount": get_props['@Importe'],
             }
         return taxeConcept
+    return None
 
 # not tested in payroll invoice
 def parse_taxe_retention(param):
