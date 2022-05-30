@@ -4,7 +4,10 @@ from common.clean_format import (
     parse_invoice_data,
     parse_concepts,
     parse_taxe_concepts,
+    parse_taxe_invoice_transfer,
     parse_taxe_retention,
+    parse_taxe_invoice_transfer,
+    parse_taxe_invoice_retentions,
 )
 
 
@@ -32,11 +35,21 @@ class InvoiceServices:
         taxe_retentions = parse_taxe_retention(dict_result)
         return taxe_retentions
 
+    def get_taxe_invoice_payload(self):
+        dict_result = xmltodict.parse(self.xml_data)
+        taxe_invoices = parse_taxe_invoice_transfer(dict_result)
+        return taxe_invoices
+
+    def get_taxe_invoice_retentions_payload(self):
+        dict_result = xmltodict.parse(self.xml_data)
+        taxe_invoices_retentions = parse_taxe_invoice_retentions(dict_result)
+        return taxe_invoices_retentions
+
 
 
 if __name__ == "__main__":
     # testing locale file
-    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/retenciones.xml"
+    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/example.xml"
     with open("{}".format(path), "r", encoding="utf-8") as file:
         file_selected = file.read()
 
@@ -51,3 +64,7 @@ if __name__ == "__main__":
     pprint.pprint(xml_parser.get_taxe_concept_payload(), indent=3)
     print("\n")
     pprint.pprint(xml_parser.get_taxe_retention_payload(), indent=3)
+    print("\n")
+    pprint.pprint(xml_parser.get_taxe_invoice_payload(), indent=3)
+    print("\n")
+    pprint.pprint(xml_parser.get_taxe_invoice_retentions_payload(), indent=3)
