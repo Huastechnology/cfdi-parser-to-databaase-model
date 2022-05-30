@@ -73,31 +73,34 @@ def parse_taxe_concepts(param):
 
 # not tested in payroll invoice
 def parse_taxe_retention(param):
-    key = "cfdi:Impuestos"
-    get_props = param.get('cfdi:Comprobante').get('cfdi:Conceptos').get('cfdi:Concepto').get('cfdi:Impuestos').get('cfdi:Retenciones').get('cfdi:Retencion')
+    keys = ["cfdi:Impuestos","cfdi:Retenciones"]
     retention={}
     taxe_list =[]
-
-    if key in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
-        if type(get_props) is list:
-            for i in range(len(get_props)):
+    
+    if keys[1] in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
+        get_props = param.get('cfdi:Comprobante').get('cfdi:Conceptos').get('cfdi:Concepto').get('cfdi:Impuestos').get('cfdi:Retenciones').get('cfdi:Retencion')
+ 
+        if keys[0] in param["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
+            if type(get_props) is list:
+                for i in range(len(get_props)):
+                    retention = {
+                        "taxe": get_props[i]["@Impuesto"],
+                        "base": get_props[i]['@Base'],
+                        "factor_type": get_props[i]['@TipoFactor'],
+                        "rate_or_fee": get_props[i]['@TasaOCuota'],
+                        "total_amount": get_props[i]['@Importe']
+                    }
+                    taxe_list.append(retention)
+                return taxe_list
+            elif(type(get_props) is dict):
                 retention = {
-                    "taxe": get_props[i]["@Impuesto"],
-                    "base": get_props[i]['@Base'],
-                    "factor_type": get_props[i]['@TipoFactor'],
-                    "rate_or_fee": get_props[i]['@TasaOCuota'],
-                    "total_amount": get_props[i]['@Importe']
+                    "taxe": get_props["@Impuesto"],
+                    "base": get_props['@Base'],
+                    "factor_type": get_props['@TipoFactor'],
+                    "rate_or_fee": get_props['@TasaOCuota'],
+                    "total_amount": get_props['@Importe'],
                 }
-                taxe_list.append(retention)
-            return taxe_list
-        elif(type(get_props) is dict):
-            retention = {
-                "taxe": get_props["@Impuesto"],
-                "base": get_props['@Base'],
-                "factor_type": get_props['@TipoFactor'],
-                "rate_or_fee": get_props['@TasaOCuota'],
-                "total_amount": get_props['@Importe'],
-            }
-        return retention
+            return retention
+    return None
     
 
