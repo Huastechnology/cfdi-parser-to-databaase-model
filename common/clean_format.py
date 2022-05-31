@@ -128,8 +128,9 @@ def parse_taxe_invoice_transfer(param):
                 "total_amount": get_props['@Importe'],
             }
         return taxe_transfer_dict
+    return None
 
-    
+
 @it_contains_properties
 def parse_taxe_invoice_retentions(param):
     key = 'cfdi:Retenciones'
