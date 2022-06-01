@@ -6,13 +6,19 @@ def it_contains_discount(func):
             fn.update({"discount": args[0]["cfdi:Comprobante"]["@Descuento"]})
             return fn
         elif key in args[0]["cfdi:Comprobante"]["cfdi:Conceptos"]["cfdi:Concepto"]:
-            fn.update(
-                {
-                    "discount": args[0]["cfdi:Comprobante"]["cfdi:Conceptos"][
-                        "cfdi:Concepto"
-                    ]["@Descuento"]
-                }
-            )
+            get_props = args[0].get("cfdi:Comprobante").get("cfdi:Conceptos").get("cfdi:Concepto")
+            if type(fn) is list:
+                fn.append(
+                    {
+                        "discount": get_props[key]
+                    }
+                )
+            if(type(fn) is dict):
+                fn.update(
+                    {
+                        "discount": get_props[key]
+                    }
+                )
             return fn
         return fn
 
