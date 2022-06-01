@@ -11,7 +11,7 @@ class XmlParser:
 
 
 def dispatcher():
-    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/invoice1.xml"
+    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/concepts.xml"
     with open("{}".format(path), "r", encoding="utf-8") as file:
         file_selected = file.read()
     

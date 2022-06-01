@@ -4,7 +4,7 @@ from services.order_data import generate_invoice
 
 if __name__ == "__main__":
     # testing locale file
-    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/retenciones.xml"
+    path = "/home/vicenteyah/Desktop/Python/ManageFiles/files/concepts.xml"
     payload = generate_invoice(path)
 
     pprint.pprint(payload, indent=3)
